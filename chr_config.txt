@@ -1,0 +1,43 @@
+[admin@MikroTik] > export compact
+# mar/26/2025 11:15:13 by RouterOS 6.42.11
+# software id = 
+#
+#
+#
+/interface ethernet
+set [ find default-name=ether2 ] advertise=\
+    10M-half,10M-full,100M-half,100M-full,1000M-full speed=1Gbps
+/interface list
+add include=none name=WAN
+add name=LAN
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip pool
+add name=dhcp_pool1 ranges=192.168.100.235-192.168.100.254
+/ip dhcp-server
+add address-pool=dhcp_pool1 disabled=no interface=ether2 name=dhcp1
+/dude
+set enabled=yes
+/interface detect-internet
+set detect-interface-list=all internet-interface-list=all lan-interface-list=\
+    all wan-interface-list=all
+/interface list member
+add interface=ether1 list=WAN
+add interface=ether2 list=LAN
+/ip dhcp-client
+add dhcp-options=clientid,hostname disabled=no interface=ether1
+/ip dhcp-server network
+add address=192.168.100.0/24 dns-server=8.8.8.8,1.1.1.1 gateway=192.168.100.234
+/ip firewall filter
+add action=accept chain=input connection-state=established,related
+add action=accept chain=input src-address=192.168.100.0/24
+add action=accept chain=input src-address=192.168.122.0/24
+add action=accept chain=forward connection-state=established,related
+add action=accept chain=forward dst-address=192.168.122.0/24 src-address=\
+    192.168.100.0/24
+add action=drop chain=forward dst-address=192.168.100.0/24 src-address=\
+    192.168.122.0/24
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface-list=WAN
+add action=accept chain=dstnat dst-address=192.168.122.0/24 src-address=\
+    192.168.100.0/24
