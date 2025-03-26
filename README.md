@@ -107,3 +107,11 @@ Basically things changed:
 - Add the key to the request (I got it from the rooted ubuntu - I hope it's not a mortal sin...)
 
 The full code can be viewed at [poc/cve_2019_3924/src/main.cpp](poc/cve_2019_3924/src/main.cpp)
+
+# Essay!
+
+So the exploit exploits Mikrotik Dude's vulnerability, which allows to send a request to Mikrotik, and Dude will get confused and send another request we want to a device behind the router (in a LAN network).
+
+Therefore, if the area is assumed to be trusted, we can exploit it, even though it is behind a router. In our case there exists a simple uploader: it takes a file and stores it in the same folder the php file is located. What we do is upload another php file, which will get sources - this way we add our custom endpoint! At this stage the rest is simple: launch bash and pipe it into a socket to the desired ip:port - the attackers ip and port. Now we have bash access!
+
+What can we do? First of all, turn on automatic updates (if mikrotik or another router allows so) - otherwise just regularly update. Secondly, we should imcorporate a zero-trust architecture - we do not trust anyone, even on LAN, and pentest with the assumption that anyone has access to the network. Lastly, the fix for this specific application vulnerability is storing files in a sensitive location. One way to counter this is to make chroot into a subdirectory for files only - thus the attacker couldn't upload files anywhere, except e.g. /var/www/webapp/uploads/
