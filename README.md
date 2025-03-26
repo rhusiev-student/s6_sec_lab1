@@ -37,7 +37,7 @@ Here you can see the old code sample commented out and the new written:
 Now I just need to init the Ubuntu VM using:
 
 ```
-/tool fetch url="http://192.168.100.248/init.php\?email=husiev.pn@ucu.edu.ua" http-method=get dst-path=_.txt
+/tool fetch url="http://192.168.100.248/init.php\?email=husiev.pn@ucu.edu.ua" http-method=get dst-path=smth.txt
 ```
 
 # Yay, everything is done - let's launch
@@ -88,11 +88,15 @@ It was at this moment that everything worked! Yay!
 
 ![yay](img/7_yay.png)
 
-The flag can be found at ![flag](flag.txt)
+The flag can be found at [flag](flag.txt)
 
 And, to prove that we can't ping the ubuntu from kali:
 
 ![can't reach](img/8_can't_reach.png)
+
+And here is Ubuntu's network settings:
+
+[ubuntu_network](ip_a_ubuntu.txt)
 
 # How my code works
 
